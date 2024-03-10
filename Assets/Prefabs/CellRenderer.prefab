@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5854736620317275956}
   - component: {fileID: 3857578658366218506}
   - component: {fileID: 2955604419110402636}
+  - component: {fileID: 4324443849206895028}
   m_Layer: 0
   m_Name: CellRenderer
   m_TagString: Untagged
@@ -97,3 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
+--- !u!114 &4324443849206895028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2369006147378016252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5deab7fc65a34f0882e63158df831f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

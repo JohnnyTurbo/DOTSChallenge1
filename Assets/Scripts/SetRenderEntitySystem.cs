@@ -5,6 +5,7 @@ using Unity.Rendering;
 
 namespace TMG.GameOfLife
 {
+    [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
     public partial struct SetRenderEntitySystem : ISystem
     {
         private float4 _aliveColor;

@@ -16,6 +16,7 @@ namespace TMG.GameOfLife
         public Camera Value;
     }
     
+    public struct AliveNextGen : IComponentData, IEnableableComponent {}
     public struct IsAlive : IComponentData, IEnableableComponent {}
 
     [InternalBufferCapacity(8)]
