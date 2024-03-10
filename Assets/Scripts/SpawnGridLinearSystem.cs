@@ -1,8 +1,8 @@
-using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 namespace TMG.GameOfLife
 {
@@ -15,7 +15,7 @@ namespace TMG.GameOfLife
             state.RequireForUpdate<GridProperties>();
 
             _dataCellArchetype = state.EntityManager.CreateArchetype(ComponentType.ReadWrite<NeighborCells>(),
-                ComponentType.ReadWrite<IsAlive>());
+                ComponentType.ReadWrite<IsAlive>(), ComponentType.ReadWrite<DataEntity>());
         }
 
         public void OnUpdate(ref SystemState state)
@@ -26,6 +26,8 @@ namespace TMG.GameOfLife
             
             var gridProperties = SystemAPI.GetSingleton<GridProperties>();
             var ecb = new EntityCommandBuffer(state.WorldUpdateAllocator);
+
+            var random = Random.CreateFromIndex(777);
             
             for (var x = 0; x < gridProperties.GridSize.x; x++)
             {
@@ -36,6 +38,8 @@ namespace TMG.GameOfLife
                     ecb.SetComponent(newRenderCell, newTransform);
 
                     var newDataCell = ecb.CreateEntity(_dataCellArchetype);
+                    ecb.SetComponentEnabled<IsAlive>(newDataCell, random.NextBool());
+                    ecb.SetComponent(newRenderCell, new DataEntity { Value = newDataCell });
                 }
             }
 

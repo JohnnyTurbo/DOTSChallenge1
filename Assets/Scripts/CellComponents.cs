@@ -23,4 +23,9 @@ namespace TMG.GameOfLife
     {
         public Entity Value;
     }
+
+    public struct DataEntity : IComponentData
+    {
+        public Entity Value;
+    }
 }
