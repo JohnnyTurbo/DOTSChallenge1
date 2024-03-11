@@ -11,6 +11,11 @@ namespace TMG.GameOfLife
         public Entity CellPrefab;
     }
 
+    public struct PackedCell16 : IComponentData
+    {
+        public ushort Value;
+    }
+
     public class MainCamera : IComponentData
     {
         public Camera Value;
@@ -28,5 +33,11 @@ namespace TMG.GameOfLife
     public struct DataEntity : IComponentData
     {
         public Entity Value;
+    }
+
+    public struct PackedDataEntity : IComponentData
+    {
+        public Entity Entity;
+        public int Index;
     }
 }

@@ -7,7 +7,7 @@ using Random = Unity.Mathematics.Random;
 
 namespace TMG.GameOfLife
 {
-    // [DisableAutoCreation]
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
     public partial struct SpawnGridLinearSystem : ISystem
     {
