@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace TMG.GameOfLife
 {
@@ -13,13 +14,29 @@ namespace TMG.GameOfLife
         public void OnUpdate(ref SystemState state)
         {
             var isAliveLookup = SystemAPI.GetComponentLookup<IsAlive>(true);
+            var entityInfoLookup = SystemAPI.GetEntityStorageInfoLookup();
+            var hits = 0;
+            var misses = 0;
+            
             foreach (var (neighborCells, aliveNext, entity) in SystemAPI.Query<DynamicBuffer<NeighborCells>, 
                          EnabledRefRW<AliveNextGen>>().WithEntityAccess()
                          .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
             {
                 var aliveNeighbors = 0;
+                var curCellInfo = entityInfoLookup[entity];
+                
                 foreach (var neighborCell in neighborCells)
                 {
+                    var neighborInfo = entityInfoLookup[neighborCell.Value];
+                    if (curCellInfo.Chunk == neighborInfo.Chunk)
+                    {
+                        hits++;
+                    }
+                    else
+                    {
+                        misses++;
+                    }
+                    
                     if (isAliveLookup.IsComponentEnabled(neighborCell.Value))
                     {
                         aliveNeighbors++;
@@ -35,9 +52,13 @@ namespace TMG.GameOfLife
                     aliveNext.ValueRW = true;
                 }
             }
+
+            var hitrate = (float)hits / (hits + misses) * 100f;
+            Debug.Log($"{hits} hits, {misses} misses - {hitrate}% Hitrate");
         }
     }
-
+    
+    // [DisableAutoCreation]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     [UpdateAfter(typeof(SpawnGridLinearSystem))]
     public partial struct MultiThreadGameOfLifeSystem : ISystem

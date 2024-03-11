@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridSize:
-    x: 32
-    y: 32
+    x: 512
+    y: 512
   CellSize: 1.1
   CellPrefab: {fileID: 2369006147378016252, guid: 5e882b1eb4f424a95926a018f928c692,
     type: 3}
@@ -189,7 +189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &571599121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +204,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Levels: 9
   StartDirection: 2
+  CellSize: 1.1
+  CellRendererPrefab: {fileID: 2369006147378016252, guid: 5e882b1eb4f424a95926a018f928c692,
+    type: 3}
 --- !u!4 &571599122
 Transform:
   m_ObjectHideFlags: 0

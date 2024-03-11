@@ -27,7 +27,6 @@ namespace TMG.GameOfLife
         
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<GridProperties>();
             state.RequireForUpdate<HilbertCurveProperties>();
             _directionOffsets = new NativeArray<int2>(4, Allocator.Persistent);
             _directionOffsets[0] = new int2(0, 1);
@@ -55,7 +54,6 @@ namespace TMG.GameOfLife
 
             var mainCamera = Camera.main;
             
-            var gridProperties = SystemAPI.GetSingleton<GridProperties>();
             var hilbertProperties = SystemAPI.GetSingleton<HilbertCurveProperties>();
             var gridSize = new int2(math.pow(2, hilbertProperties.Levels));
             
@@ -86,8 +84,6 @@ namespace TMG.GameOfLife
                     var curPosition = new int2(x, y);
                     var curIndex = x * gridSize.y + y;
                     var curDataEntity = dataEntities[curIndex];
-
-                    
                     
                     foreach (var neighborOffset in _neighborOffsets)
                     {
@@ -104,9 +100,9 @@ namespace TMG.GameOfLife
                 }
             }
 
-            var gridCenter = (float2)gridSize * gridProperties.CellSize * 0.5f;
+            var gridCenter = (float2)gridSize * hilbertProperties.CellSize * 0.5f;
             mainCamera.transform.position = new Vector3(gridCenter.x, gridCenter.y, -10f);
-            mainCamera.orthographicSize = gridSize.y * (gridProperties.CellSize + 0.1f) * 0.5f;
+            mainCamera.orthographicSize = gridSize.y * (hilbertProperties.CellSize + 0.1f) * 0.5f;
 
             
             ecb.Playback(state.EntityManager);
@@ -193,14 +189,14 @@ namespace TMG.GameOfLife
                 curPos = nextPos;
                 SpawnCell(curPos.x, curPos.y);
                 nextPos = curPos + directionOffsets[(int)direction];
-                var startPos = new float3(curPos.x * gridProperties.CellSize, curPos.y * gridProperties.CellSize, -1f);
-                var endPos = new float3(nextPos.x * gridProperties.CellSize, nextPos.y * gridProperties.CellSize, -1f);
+                var startPos = new float3(curPos.x * hilbertProperties.CellSize, curPos.y * hilbertProperties.CellSize, -1f);
+                var endPos = new float3(nextPos.x * hilbertProperties.CellSize, nextPos.y * hilbertProperties.CellSize, -1f);
                 Debug.DrawLine(startPos, endPos, Color.white, 10f);
             }
 
             void SpawnCell(int x, int y)
             {
-                var newRenderCell = ecb.Instantiate(gridProperties.CellPrefab);
+                var newRenderCell = ecb.Instantiate(hilbertProperties.CellPrefab);
                 var col = Color.HSVToRGB((float)hilbertIndex / 256, 1, 1);
                 /*ecb.SetComponent(newRenderCell, new URPMaterialPropertyBaseColor{Value = new float4
                 {
@@ -219,7 +215,7 @@ namespace TMG.GameOfLife
                 }});
                 
                 hilbertIndex++;
-                var newTransform = LocalTransform.FromPosition(x * gridProperties.CellSize, y * gridProperties.CellSize, 0f);
+                var newTransform = LocalTransform.FromPosition(x * hilbertProperties.CellSize, y * hilbertProperties.CellSize, 0f);
                 ecb.SetComponent(newRenderCell, newTransform);
 
                 var newDataCell = ecb.CreateEntity(dataCellArchetype);
@@ -228,6 +224,7 @@ namespace TMG.GameOfLife
 
                 var index = x * gridSize.y + y;
                 dataEntities[index] = newDataCell;
+                // Debug.Log($"Spawned at index {index}");
             }
         }
     }

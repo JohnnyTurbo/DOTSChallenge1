@@ -6,5 +6,7 @@ namespace TMG.GameOfLife
     {
         public int Levels;
         public Direction Direction;
+        public float CellSize;
+        public Entity CellPrefab;
     }
 }
