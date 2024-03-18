@@ -9,26 +9,21 @@ namespace TMG.GameOfLife
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PackedCell16>();
+            state.RequireForUpdate<PackedCell64>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var packedCells = SystemAPI.GetSingleton<PackedCell16>();
+            var cellLookup = SystemAPI.GetBufferLookup<PackedCell64>();
+            
             foreach (var (color, dataEntity) in SystemAPI.Query<RefRW<URPMaterialPropertyBaseColor>, PackedDataEntity>())
             {
-                var cellBit = (ushort)(1 << dataEntity.Index);
-                var isAlive = (cellBit & packedCells.Value) != 0;
+                var cellBytes = cellLookup[dataEntity.Entity].ElementAt(dataEntity.IndexInBuffer).Value;
+                var cellBit = (ulong)(1 << dataEntity.IndexInElement);
+                var isAlive = (cellBit & cellBytes) != 0;
                 
-                if (isAlive)
-                {
-                    color.ValueRW.Value = new float4(0, 1, 0, 1);
-                }
-                else
-                {
-                    color.ValueRW.Value = new float4(0.25f, 0.25f, 0.25f, 1f);
-                }
+                color.ValueRW.Value = isAlive ? new float4(0, 1, 0, 1) : new float4(0.25f, 0.25f, 0.25f, 1f);
             }
         }
     }

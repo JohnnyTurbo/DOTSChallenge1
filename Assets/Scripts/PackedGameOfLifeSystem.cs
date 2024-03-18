@@ -1,10 +1,10 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace TMG.GameOfLife
 {
+    [DisableAutoCreation]
     public partial struct PackedGameOfLifeSystem : ISystem
     {
         private NativeArray<int> _bitOffsets;
@@ -12,7 +12,7 @@ namespace TMG.GameOfLife
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PackedCell16>();
+            // state.RequireForUpdate<PackedCell16>();
             // ushort layout
             // 00 04 08 12
             // 01 05 09 13
@@ -36,7 +36,7 @@ namespace TMG.GameOfLife
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var packedCells = SystemAPI.GetSingleton<PackedCell16>().Value;
+            var packedCells = new ushort(); // SystemAPI.GetSingleton<PackedCell16>().Value;
             ushort nextCells = 0;
 
             for (var i = 0; i < 16; i++)
@@ -69,7 +69,7 @@ namespace TMG.GameOfLife
                 }
             }
             
-            SystemAPI.SetSingleton(new PackedCell16{Value = nextCells});
+            // SystemAPI.SetSingleton(new PackedCell16{Value = nextCells});
         }
 
         [BurstCompile]

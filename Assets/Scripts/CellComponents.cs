@@ -10,10 +10,11 @@ namespace TMG.GameOfLife
         public float CellSize;
         public Entity CellPrefab;
     }
-
-    public struct PackedCell16 : IComponentData
+    
+    [InternalBufferCapacity(16)]
+    public struct PackedCell64 : IBufferElementData
     {
-        public ushort Value;
+        public ulong Value;
     }
 
     public class MainCamera : IComponentData
@@ -38,6 +39,7 @@ namespace TMG.GameOfLife
     public struct PackedDataEntity : IComponentData
     {
         public Entity Entity;
-        public int Index;
+        public int IndexInBuffer;
+        public int IndexInElement;
     }
 }
