@@ -5,6 +5,8 @@ using Unity.Rendering;
 
 namespace TMG.GameOfLife
 {
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateAfter(typeof(PackedGameOfLifeSystem))]
     public partial struct RenderPackedCellSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

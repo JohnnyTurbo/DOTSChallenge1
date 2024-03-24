@@ -10,6 +10,13 @@ namespace TMG.GameOfLife
         public float CellSize;
         public Entity CellPrefab;
     }
+
+    public struct PackedGridProperties : IComponentData
+    {
+        public int2 GridSize;
+        public float CellSize;
+        public Entity CellPrefab;
+    }
     
     [InternalBufferCapacity(16)]
     public struct PackedCell64 : IBufferElementData

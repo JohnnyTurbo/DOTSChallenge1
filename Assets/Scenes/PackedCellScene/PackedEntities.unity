@@ -167,7 +167,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8f385a2f5b49b588b2d28a3c7b2f06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  count: 1
+  GridSize:
+    x: 1
+    y: 1
+  CellSize: 1.1
+  CellPrefab: {fileID: 2369006147378016252, guid: acd419c39eaf0401db1e2611110686ff,
+    type: 3}
+  StartingValue: 459010
 --- !u!1 &1006821058
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +183,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1006821060}
-  - component: {fileID: 1006821059}
   m_Layer: 0
   m_Name: GridProperties
   m_TagString: Untagged
@@ -185,24 +190,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1006821059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006821058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5769859970b74a3ab9b5fa6c7d7f91e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridSize:
-    x: 8
-    y: 8
-  CellSize: 1.1
-  CellPrefab: {fileID: 2369006147378016252, guid: acd419c39eaf0401db1e2611110686ff,
-    type: 3}
 --- !u!4 &1006821060
 Transform:
   m_ObjectHideFlags: 0
