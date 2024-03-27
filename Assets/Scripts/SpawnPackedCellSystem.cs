@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
 namespace TMG.GameOfLife
@@ -62,6 +63,10 @@ namespace TMG.GameOfLife
             }
 
             ecb.Playback(state.EntityManager);
+
+            var gridCenter = (float2)gridProperties.GridSize * 8 * gridProperties.CellSize * 0.5f;
+            Camera.main.transform.position = new Vector3(gridCenter.x, gridCenter.y, -10f);
+            Camera.main.orthographicSize = gridProperties.GridSize.y * 8 * (gridProperties.CellSize + 0.1f) * 0.5f;
         }
     }
 }
