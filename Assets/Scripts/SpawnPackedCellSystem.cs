@@ -35,7 +35,7 @@ namespace TMG.GameOfLife
                         for (var y = 0; y < 8; y++)
                         {
                             var curPos = new int2(x, y);
-                            var curIndex = (x * 8 * gridProperties.GridSize.y + y);
+                            var curIndex = (x * 8 + y);
                             // if (random.NextBool())
                             // {
                             //     Debug.Log($"i{i} Index: {curIndex} pos: {curPos}");
