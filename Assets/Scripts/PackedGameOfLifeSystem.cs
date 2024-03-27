@@ -80,9 +80,9 @@ namespace TMG.GameOfLife
             
             foreach (var packedCellBuffer in SystemAPI.Query<DynamicBuffer<PackedCell64>>())
             {
-                var nextCells = (ulong)0;
                 for (var bufferIndex = 0; bufferIndex < packedCellBuffer.Length; bufferIndex++)
                 {
+                    var nextCells = (ulong)0;
                     var packedCells = packedCellBuffer[bufferIndex].Value;
                     
                     for (var i = 0; i < 64; i++)
@@ -116,16 +116,16 @@ namespace TMG.GameOfLife
                             }
                         }
                     }
+                    nextCellList.Add(nextCells);
                 }
-
-                nextCellList.Add(nextCells);
             }
 
-            var index = 0;
             foreach (var packedCells in SystemAPI.Query<DynamicBuffer<PackedCell64>>())
             {
-                packedCells.ElementAt(index).Value = nextCellList[index];
-                index++;
+                for (var bufferIndex = 0; bufferIndex < packedCells.Length; bufferIndex++)
+                {
+                    packedCells.ElementAt(bufferIndex).Value = nextCellList[bufferIndex];
+                }
             }
         }
 

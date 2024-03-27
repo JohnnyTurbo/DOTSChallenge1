@@ -17,7 +17,6 @@ namespace TMG.GameOfLife
             state.RequireForUpdate<PackedCell64>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;

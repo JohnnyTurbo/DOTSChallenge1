@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridSize:
-    x: 2
-    y: 2
+    x: 64
+    y: 64
   CellSize: 1.1
   CellPrefab: {fileID: 2369006147378016252, guid: acd419c39eaf0401db1e2611110686ff,
     type: 3}
