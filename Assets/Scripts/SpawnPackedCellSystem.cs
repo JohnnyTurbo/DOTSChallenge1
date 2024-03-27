@@ -27,6 +27,8 @@ namespace TMG.GameOfLife
             {
                 for (var i = 0; i < packedCellBuffer.Length; i++)
                 {
+                    var packedPosition = new int2(i / gridProperties.GridSize.x, i % gridProperties.GridSize.x);
+                    
                     var packedCell = packedCellBuffer[i];
                     for (var x = 0; x < 8; x++)
                     {
@@ -48,8 +50,9 @@ namespace TMG.GameOfLife
                                 IndexInElement = curIndex
                             });
 
-                            var newTransform = LocalTransform.FromPosition((i*8+x) * gridProperties.CellSize,
-                                y * gridProperties.CellSize, 0f);
+                            var newTransform = LocalTransform.FromPosition(
+                                (packedPosition.x * 8 + x) * gridProperties.CellSize,
+                                (packedPosition.y * 8 + y) * gridProperties.CellSize, 0f);
                             ecb.SetComponent(newRenderCell, newTransform);
                         }
                     }
