@@ -176,7 +176,7 @@ namespace TMG.GameOfLife
         [ReadOnly] public CellLookupComponent CellLookupComponent;
         [ReadOnly] public BufferLookup<PackedCell64> PackedCellLookup;
         
-        [NativeDisableUnsafePtrRestriction]
+        [NativeDisableContainerSafetyRestriction]
         [NativeDisableParallelForRestriction]
         public NativeArray<ulong> NextCellArray;
         

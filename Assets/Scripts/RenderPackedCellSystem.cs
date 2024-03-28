@@ -58,7 +58,8 @@ namespace TMG.GameOfLife
         
         private void Execute(ref URPMaterialPropertyBaseColor color, in PackedDataEntity dataEntity)
         {
-            var cellBytes = CellLookup[dataEntity.Entity][dataEntity.IndexInBuffer].Value;
+            var buffer = CellLookup[dataEntity.Entity];
+            var cellBytes = buffer[dataEntity.IndexInBuffer].Value;
             var cellBit = (ulong)1 << dataEntity.IndexInElement;
             var isAlive = (cellBit & cellBytes) != 0;
                 

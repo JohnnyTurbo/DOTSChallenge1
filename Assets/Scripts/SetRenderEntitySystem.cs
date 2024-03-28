@@ -34,7 +34,7 @@ namespace TMG.GameOfLife
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderLast = true)]
     public partial struct MultiThreadSetRenderEntitySystem : ISystem
     {
-        private float4 _aliveColor;
+        /*private float4 _aliveColor;
         private float4 _deadColor;
 
         public void OnCreate(ref SystemState state)
@@ -52,19 +52,19 @@ namespace TMG.GameOfLife
                 AliveColor = _aliveColor,
                 DeadColor = _deadColor
             }.ScheduleParallel(state.Dependency);
-        }
+        }*/
     }
 
-    [BurstCompile]
-    public partial struct SetRenderEntityJob : IJobEntity
-    {
-        [ReadOnly] public ComponentLookup<IsAlive> AliveLookup;
+    // [BurstCompile]
+    // public partial struct SetRenderEntityJob : IJobEntity
+    // {
+        /*[ReadOnly] public ComponentLookup<IsAlive> AliveLookup;
         [ReadOnly] public float4 AliveColor;
         [ReadOnly] public float4 DeadColor;
 
         private void Execute(ref URPMaterialPropertyBaseColor color, in DataEntity dataEntity)
         {
             color.Value = AliveLookup.IsComponentEnabled(dataEntity.Value) ? AliveColor : DeadColor;
-        }
-    }
+        }*/
+    // }
 }
