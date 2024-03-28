@@ -12,7 +12,7 @@ namespace TMG.GameOfLife
         public int Offset3;
     }
     
-    // [DisableAutoCreation]
+    [DisableAutoCreation]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     [UpdateAfter(typeof(SpawnPackedCellSystem))]
     public partial struct PackedGameOfLifeSystem : ISystem
@@ -20,14 +20,6 @@ namespace TMG.GameOfLife
         private int shouldRun;
 
         private NativeArray<ulong> _bitMasks;
- 
-        private struct EdgeLookup
-        {
-            public int2 CellOffset;
-            public byte Index;
-        }
-
-        private NativeArray<EdgeLookup> _edgeLookups;
         private NativeArray<int2> _neighborOffsets;
         private NativeArray<EdgeOffsets> _edgeOffsets;
         
@@ -68,7 +60,6 @@ namespace TMG.GameOfLife
         private void GenerateBitMasks()
         {
             _bitMasks = new NativeArray<ulong>(64, Allocator.Persistent);
-            _edgeLookups = new NativeArray<EdgeLookup>(64, Allocator.Persistent);
             
             _neighborOffsets = new NativeArray<int2>(8, Allocator.Persistent);
             _neighborOffsets[0] = new int2(-1, -1);
