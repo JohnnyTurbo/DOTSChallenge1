@@ -39,6 +39,11 @@ namespace TMG.GameOfLife
                         cellBufferIndex++;
                         curCellBuffer = cellBuffers[cellBufferIndex];
                     }
+
+                    var packedBuffer = SystemAPI.GetBuffer<PackedCell64>(curCellBuffer);
+                    var packedElement = packedBuffer.ElementAt(curIndexInBuffer);
+                    packedElement.Position = new int2(gridX, gridY);
+                    packedBuffer.ElementAt(curIndexInBuffer) = packedElement;
                     
                     for (var x = 0; x < 8; x++)
                     {

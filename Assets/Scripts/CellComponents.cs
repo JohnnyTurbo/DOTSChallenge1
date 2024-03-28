@@ -22,6 +22,7 @@ namespace TMG.GameOfLife
     public struct PackedCell64 : IBufferElementData
     {
         public ulong Value;
+        public int2 Position;
     }
 
     public class MainCamera : IComponentData

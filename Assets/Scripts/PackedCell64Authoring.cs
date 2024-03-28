@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace TMG.GameOfLife
 {
-    public struct PackedCellEntity : IComponentData {}
-    
     public class PackedCell64Authoring : MonoBehaviour
     {
         public int2 GridSize;
@@ -37,7 +35,6 @@ namespace TMG.GameOfLife
                         elementCounter = 0;
                         var newCellBufferEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, "CellBufferEntity");
                         buffer = AddBuffer<PackedCell64>(newCellBufferEntity);
-                        AddComponent<PackedCellEntity>(newCellBufferEntity);
                     }
                     buffer.Add(new PackedCell64 { Value = authoring.StartingValue });
                 }
