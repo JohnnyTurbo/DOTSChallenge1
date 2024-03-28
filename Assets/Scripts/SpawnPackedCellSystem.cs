@@ -1,4 +1,3 @@
-using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -23,13 +22,24 @@ namespace TMG.GameOfLife
             var gridProperties = SystemAPI.GetSingleton<PackedGridProperties>();
             var random = Random.CreateFromIndex(777);
             var ecb = new EntityCommandBuffer(state.WorldUpdateAllocator);
-            foreach (var (packedCellBuffer, dataEntity) in SystemAPI.Query<DynamicBuffer<PackedCell64>>().WithEntityAccess())
+            var cellBufferQuery = SystemAPI.QueryBuilder().WithAll<PackedCell64>().Build();
+            var cellBuffers = cellBufferQuery.ToEntityArray(state.WorldUpdateAllocator);
+            var cellBufferIndex = 0;
+            var curIndexInBuffer = 0;
+
+            var curCellBuffer = cellBuffers[cellBufferIndex];
+            
+            for (var gridX = 0; gridX < gridProperties.GridSize.x; gridX++)
             {
-                for (var i = 0; i < packedCellBuffer.Length; i++)
+                for (var gridY = 0; gridY < gridProperties.GridSize.y; gridY++)
                 {
-                    var packedPosition = new int2(i / gridProperties.GridSize.x, i % gridProperties.GridSize.x);
+                    if (curIndexInBuffer >= 16)
+                    {
+                        curIndexInBuffer = 0;
+                        cellBufferIndex++;
+                        curCellBuffer = cellBuffers[cellBufferIndex];
+                    }
                     
-                    var packedCell = packedCellBuffer[i];
                     for (var x = 0; x < 8; x++)
                     {
                         for (var y = 0; y < 8; y++)
@@ -45,19 +55,18 @@ namespace TMG.GameOfLife
                             var newRenderCell = ecb.Instantiate(gridProperties.CellPrefab);
                             ecb.SetComponent(newRenderCell, new PackedDataEntity
                             {
-                                Entity = dataEntity,
-                                IndexInBuffer = i,
+                                Entity = curCellBuffer,
+                                IndexInBuffer = curIndexInBuffer,
                                 IndexInElement = curIndex
                             });
 
                             var newTransform = LocalTransform.FromPosition(
-                                (packedPosition.x * 8 + x) * gridProperties.CellSize,
-                                (packedPosition.y * 8 + y) * gridProperties.CellSize, 0f);
+                                (gridX * 8 + x) * gridProperties.CellSize,
+                                (gridY * 8 + y) * gridProperties.CellSize, 0f);
                             ecb.SetComponent(newRenderCell, newTransform);
                         }
                     }
-
-                    packedCellBuffer.ElementAt(i) = packedCell;
+                    curIndexInBuffer++;
                 }
             }
 
