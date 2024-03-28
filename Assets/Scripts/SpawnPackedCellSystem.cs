@@ -79,11 +79,14 @@ namespace TMG.GameOfLife
                         {
                             var curPos = new int2(x, y);
                             var curIndex = (x * 8 + y);
-                            // if (random.NextBool())
-                            // {
-                            //     Debug.Log($"i{i} Index: {curIndex} pos: {curPos}");
-                            //     packedCell.Value |= (ulong)(1 << curIndex);
-                            // }
+                            // packedElement.Value = (ulong)1 << gridIndex;
+                            // packedBuffer.ElementAt(curIndexInBuffer) = packedElement;
+                            
+                            if (random.NextBool())
+                            {
+                                packedElement.Value |= (ulong)1 << curIndex;
+                                packedBuffer.ElementAt(curIndexInBuffer) = packedElement;
+                            }
 
                             var newRenderCell = ecb.Instantiate(gridProperties.CellPrefab);
                             ecb.SetComponent(newRenderCell, new PackedDataEntity

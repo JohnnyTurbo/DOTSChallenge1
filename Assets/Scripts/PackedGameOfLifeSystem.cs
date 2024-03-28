@@ -161,7 +161,8 @@ namespace TMG.GameOfLife
             }
 
             var gridProperties = SystemAPI.GetSingleton<PackedGridProperties>();
-            var nextCellList = new NativeList<ulong>(8, state.WorldUpdateAllocator);
+            var nextCellArray = new NativeArray<ulong>(gridProperties.GridCount, Allocator.Temp);
+            
             var cellLookupComponent = SystemAPI.GetSingleton<CellLookupComponent>().Value;
             ref var cellLookup = ref cellLookupComponent.Value.Cells;
             
@@ -381,7 +382,9 @@ namespace TMG.GameOfLife
                             }
                         }
                     }
-                    nextCellList.Add(nextCells);
+
+                    var cellPositionIndex = cellPosition.x * gridProperties.GridSize.x + cellPosition.y;
+                    nextCellArray[cellPositionIndex] = nextCells;
                 }
             }
 
@@ -389,7 +392,9 @@ namespace TMG.GameOfLife
             {
                 for (var bufferIndex = 0; bufferIndex < packedCells.Length; bufferIndex++)
                 {
-                    packedCells.ElementAt(bufferIndex).Value = nextCellList[bufferIndex];
+                    var packedCell = packedCells.ElementAt(bufferIndex);
+                    var gridIndex = packedCell.Position.x * gridProperties.GridSize.x + packedCell.Position.y;
+                    packedCells.ElementAt(bufferIndex).Value = nextCellArray[gridIndex];
                 }
             }
 
@@ -406,15 +411,12 @@ namespace TMG.GameOfLife
                     return false;
                 }
                 neighborIndex = neighborPosition.x * gridProperties.GridSize.x + neighborPosition.y;
-                return neighborIndex >= 0 && neighborIndex < gridProperties.GridCount;
+                return true;
             }
 
             int GetAliveNeighborCount(ulong neighborValue, int startIndex, EdgeOffsets edgeOffsets)
             {
                 var aliveNeighborCount = 0;
-                // var neighborValue = curEntity.Equals(cellInfo.Entity)
-                //     ? curBuffer[cellInfo.Index].Value
-                //     : SystemAPI.GetBuffer<PackedCell64>(cellInfo.Entity).ElementAt(cellInfo.Index).Value;
 
                 var neighbor1 = startIndex + edgeOffsets.Offset1;
                 if (IsValidNeighbor(startIndex, neighbor1))
