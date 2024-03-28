@@ -168,12 +168,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridSize:
-    x: 8
-    y: 8
+    x: 4
+    y: 4
   CellSize: 1.1
   CellPrefab: {fileID: 2369006147378016252, guid: acd419c39eaf0401db1e2611110686ff,
     type: 3}
-  StartingValue: 394500
+  StartingValue: 11024812444018016409
 --- !u!1 &1006821058
 GameObject:
   m_ObjectHideFlags: 0

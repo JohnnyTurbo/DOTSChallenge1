@@ -16,6 +16,8 @@ namespace TMG.GameOfLife
         public int2 GridSize;
         public float CellSize;
         public Entity CellPrefab;
+
+        public int GridCount => GridSize.x * GridSize.y;
     }
     
     [InternalBufferCapacity(16)]

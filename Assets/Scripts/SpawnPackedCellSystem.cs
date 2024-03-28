@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -6,6 +7,22 @@ using Random = Unity.Mathematics.Random;
 
 namespace TMG.GameOfLife
 {
+    public struct CellLookup
+    {
+        public Entity Entity;
+        public int Index;
+    }
+    
+    public struct CellLookupPool
+    {
+        public BlobArray<CellLookup> Cells;
+    }
+
+    public struct CellLookupComponent : IComponentData
+    {
+        public BlobAssetReference<CellLookupPool> Value;
+    }
+    
     public partial struct SpawnPackedCellSystem : ISystem
     {
         private EntityArchetype PackedCellArchetype;
@@ -28,6 +45,11 @@ namespace TMG.GameOfLife
             var curIndexInBuffer = 0;
 
             var curCellBuffer = cellBuffers[cellBufferIndex];
+            var blobBuilder = new BlobBuilder(Allocator.Temp);
+            ref var cellLookupPool = ref blobBuilder.ConstructRoot<CellLookupPool>();
+            var arrayBuilder = blobBuilder.Allocate(ref cellLookupPool.Cells,
+                gridProperties.GridSize.x * gridProperties.GridSize.y);
+            var gridIndex = 0;
             
             for (var gridX = 0; gridX < gridProperties.GridSize.x; gridX++)
             {
@@ -44,6 +66,12 @@ namespace TMG.GameOfLife
                     var packedElement = packedBuffer.ElementAt(curIndexInBuffer);
                     packedElement.Position = new int2(gridX, gridY);
                     packedBuffer.ElementAt(curIndexInBuffer) = packedElement;
+
+                    arrayBuilder[gridIndex] = new CellLookup
+                    {
+                        Entity = curCellBuffer,
+                        Index = curIndexInBuffer
+                    };
                     
                     for (var x = 0; x < 8; x++)
                     {
@@ -72,9 +100,18 @@ namespace TMG.GameOfLife
                         }
                     }
                     curIndexInBuffer++;
+                    gridIndex++;
                 }
             }
 
+            var result = blobBuilder.CreateBlobAssetReference<CellLookupPool>(Allocator.Persistent);
+
+            var gridPropertiesEntity = SystemAPI.GetSingletonEntity<PackedGridProperties>();
+            ecb.AddComponent(gridPropertiesEntity, new CellLookupComponent
+            {
+                Value = result
+            });
+            
             ecb.Playback(state.EntityManager);
 
             var gridCenter = (float2)gridProperties.GridSize * 8 * gridProperties.CellSize * 0.5f;
